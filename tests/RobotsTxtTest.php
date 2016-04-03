@@ -6,8 +6,6 @@ use vipnytt\SitemapParser;
 class RobotsTxtTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * robots.txt test
-     *
      * @dataProvider generateDataForTest
      * @param string $url URL
      * @param string $body URL body content

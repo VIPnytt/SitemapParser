@@ -38,9 +38,9 @@ Then run `composer update`.
 ### Basic example of parsing
 Returns an list of URLs only.
 ```php
-require_once(dirname(__FILE__) . "/vendor/autoload.php");
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
+
 try {
     $parser = new SitemapParser();
     $parser->parse('https://www.google.com/sitemap.xml');
@@ -55,9 +55,9 @@ try {
 ### Advanced parsing
 Returns all tags available, for both Sitemaps and URLs.
 ```php
-require_once(dirname(__FILE__) . "/vendor/autoload.php");
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
+
 try {
     $parser = new SitemapParser('MyCustomUserAgent');
     $parser->parse('https://www.google.com/robots.txt');
@@ -82,9 +82,9 @@ try {
 ### Recursive parsing
 Parses any Sitemaps detected, to generate an complete list of URLs
 ```php
-require_once(dirname(__FILE__) . "/vendor/autoload.php");
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
+
 try {
     $parser = new SitemapParser('MyCustomUserAgent');
     $parser->parseRecursive('http://www.google.com/robots.txt');
