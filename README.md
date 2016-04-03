@@ -56,8 +56,8 @@ try {
 Returns all tags available, for both Sitemaps and URLs.
 ```php
 require_once(dirname(__FILE__) . "/vendor/autoload.php");
-use tzfrs\Exceptions\GoogleSitemapParserException;
-use tzfrs\GoogleSitemapParser;
+use vipnytt\SitemapParser;
+use vipnytt\SitemapParser\Exceptions\SitemapParserException;
 try {
     $parser = new SitemapParser('MyCustomUserAgent');
     $parser->parse('https://www.google.com/robots.txt');
