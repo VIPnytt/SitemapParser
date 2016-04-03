@@ -1,0 +1,43 @@
+{
+  "name": "vipnytt/sitemapparser",
+  "description": "PHP class to parse XML sitemaps according to Sitemaps.org specifications.",
+  "version": "1.0.0",
+  "keywords": [
+    "sitemap",
+    "sitemaps.org",
+    "parser",
+    "xml",
+    "robots.txt"
+  ],
+  "homepage": "https://github.com/VIPnytt/SitemapParser",
+  "type": "library",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "VIP nytt",
+      "email": "vipnytt@gmail.com",
+      "role": "creator"
+    },
+    {
+      "name": "Jan-Petter Gundersen",
+      "email": "europe.jpg@gmail.com",
+      "role": "developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "guzzlehttp/guzzle": "6.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=3.7",
+    "codeclimate/php-test-reporter": "0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "vipnytt\\": "src/",
+      "vipnytt\\test\\": "test/"
+    }
+  }
+}
