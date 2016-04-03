@@ -52,15 +52,15 @@ try {
 }
 ```
 
-### Advanced parsing
-Returns all tags available, for both Sitemaps and URLs.
+### Advanced example of parsing
+Returns all available tags, for both Sitemaps and URLs.
 ```php
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
 
 try {
     $parser = new SitemapParser('MyCustomUserAgent');
-    $parser->parse('https://www.google.com/robots.txt');
+    $parser->parse('http://php.net/sitemap.xml');
     foreach ($parser->getSitemaps() as $url => $tags) {
         echo 'Sitemap<br>';
         echo 'URL: ' . $url . '<br>';

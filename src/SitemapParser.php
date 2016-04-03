@@ -73,7 +73,7 @@ class SitemapParser
         mb_language("uni");
         @mb_internal_encoding('UTF-8');
         $this->config = $config;
-        $this->config['guzzle']['headers']['User-Agent'] = $userAgent;
+        $this->userAgent = $userAgent;
     }
 
     /**

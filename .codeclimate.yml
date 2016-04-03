@@ -1,4 +1,3 @@
-languages:
-  PHP: true
 exclude_paths:
-- "examples/**"
+- examples/
+- tests/
