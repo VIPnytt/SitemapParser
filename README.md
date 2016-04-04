@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/VIPnytt/SitemapParser.svg?branch=master)](https://travis-ci.org/VIPnytt/X-Robots-Tag-parser)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/VIPnytt/SitemapParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/VIPnytt/SitemapParser/?branch=master)
 [![Code Climate](https://codeclimate.com/github/VIPnytt/SitemapParser/badges/gpa.svg)](https://codeclimate.com/github/VIPnytt/SitemapParser)
 [![Test Coverage](https://codeclimate.com/github/VIPnytt/SitemapParser/badges/coverage.svg)](https://codeclimate.com/github/VIPnytt/SitemapParser/coverage)
 [![License](https://poser.pugx.org/VIPnytt/SitemapParser/license)](https://github.com/VIPnytt/SitemapParser/blob/master/LICENSE)
