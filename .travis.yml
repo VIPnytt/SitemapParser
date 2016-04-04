@@ -8,9 +8,5 @@ before_install:
   - composer selfupdate
 install:
   - composer install
-script:
-  - phpunit --coverage-text --coverage-clover=coverage.clover
 after_script:
   - CODECLIMATE_REPO_TOKEN=2c24b220853ff7a472533fb97563518380403febe199edfb84094d2f23e40f1e ./vendor/bin/test-reporter
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
