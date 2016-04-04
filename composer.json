@@ -1,6 +1,6 @@
 {
   "name": "vipnytt/sitemapparser",
-  "description": "PHP class to parse XML sitemaps compliant with the Sitemaps.org protocol.",
+  "description": "XML Sitemap parser class compliant with the Sitemaps.org protocol.",
   "version": "1.0.0",
   "keywords": [
     "sitemap",
