@@ -70,8 +70,13 @@ class SitemapParser
         if (!extension_loaded('simplexml')) {
             throw new SitemapParserException('The extension `simplexml` must be installed and loaded for this library');
         }
+        if (!extension_loaded('mbstring')) {
+            throw new SitemapParserException('The extension `mbstring` must be installed and loaded for this library');
+        }
         mb_language("uni");
-        @mb_internal_encoding('UTF-8');
+        if (!mb_internal_encoding('UTF-8')) {
+            throw new SitemapParserException('Unable to set internal character encoding to UTF-8');
+        }
         $this->config = $config;
         $this->userAgent = $userAgent;
     }
@@ -223,11 +228,9 @@ class SitemapParser
                 case 'sitemap':
                     $this->sitemaps[$array['loc']] = $array;
                     return true;
-                    break;
                 case 'url':
                     $this->urls[$array['loc']] = $array;
                     return true;
-                    break;
             }
         }
         return false;
