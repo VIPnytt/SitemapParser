@@ -1,4 +1,8 @@
-[![Build Status](https://travis-ci.org/VIPnytt/SitemapParser.svg?branch=master)](https://travis-ci.org/VIPnytt/X-Robots-Tag-parser) [![Code Climate](https://codeclimate.com/github/VIPnytt/SitemapParser/badges/gpa.svg)](https://codeclimate.com/github/VIPnytt/SitemapParser) [![Test Coverage](https://codeclimate.com/github/VIPnytt/SitemapParser/badges/coverage.svg)](https://codeclimate.com/github/VIPnytt/SitemapParser/coverage) [![License](https://poser.pugx.org/VIPnytt/SitemapParser/license)](https://packagist.org/packages/VIPnytt/SitemapParser) [![Join the chat at https://gitter.im/VIPnytt/SitemapParser](https://badges.gitter.im/VIPnytt/SitemapParser.svg)](https://gitter.im/VIPnytt/SitemapParser)
+[![Build Status](https://travis-ci.org/VIPnytt/SitemapParser.svg?branch=master)](https://travis-ci.org/VIPnytt/X-Robots-Tag-parser)
+[![Code Climate](https://codeclimate.com/github/VIPnytt/SitemapParser/badges/gpa.svg)](https://codeclimate.com/github/VIPnytt/SitemapParser)
+[![Test Coverage](https://codeclimate.com/github/VIPnytt/SitemapParser/badges/coverage.svg)](https://codeclimate.com/github/VIPnytt/SitemapParser/coverage)
+[![License](https://poser.pugx.org/VIPnytt/SitemapParser/license)](https://github.com/VIPnytt/SitemapParser/blob/master/LICENSE)
+[![Join the chat at https://gitter.im/VIPnytt/SitemapParser](https://badges.gitter.im/VIPnytt/SitemapParser.svg)](https://gitter.im/VIPnytt/SitemapParser)
 
 # XML Sitemap parser
 An easy-to-use PHP library to parse XML Sitemaps compliant with the [Sitemaps.org protocol](http://www.sitemaps.org/protocol.html).
@@ -10,7 +14,7 @@ The library is available for install via Composer. To install, add the requireme
 ```json
 {
     "require": {
-        "vipnytt/sitemapparser": "1.*"
+        "vipnytt/sitemapparser": "1.0.*"
     }
 }
 ```
@@ -20,7 +24,7 @@ Then run `composer update`.
 [Find out more about Composer here](https://getcomposer.org)
 
 ## Features
-- Parse Sitemaps
+- Basic parsing
 - Recursive parsing
 - Custom User-Agent string
 - Proxy support
@@ -35,7 +39,7 @@ Then run `composer update`.
 
 ## Getting Started
 
-### Basic example of parsing
+### Basic example
 Returns an list of URLs only.
 ```php
 use vipnytt\SitemapParser;
@@ -52,7 +56,7 @@ try {
 }
 ```
 
-### Advanced example of parsing
+### Advanced
 Returns all available tags, for both Sitemaps and URLs.
 ```php
 use vipnytt\SitemapParser;
@@ -79,8 +83,8 @@ try {
 }
 ```
 
-### Recursive parsing
-Parses any Sitemaps detected, to generate an complete list of URLs
+### Recursive
+Parses any sitemap detected while parsing, to get an complete list of URLs
 ```php
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;

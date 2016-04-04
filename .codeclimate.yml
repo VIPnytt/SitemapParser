@@ -1,3 +1,5 @@
+languages:
+- php
 exclude_paths:
 - examples/
 - tests/

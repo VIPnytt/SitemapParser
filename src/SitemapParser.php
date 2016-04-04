@@ -242,7 +242,7 @@ class SitemapParser
     protected function generateXMLObject($xml)
     {
         libxml_use_internal_errors(true);
-        $doc = simplexml_load_string($xml);
+        $doc = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
         if ($doc === false) {
             libxml_clear_errors();
             return false;
