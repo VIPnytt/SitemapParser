@@ -6,7 +6,7 @@ use vipnytt\SitemapParser;
 class ExceptionMBStringTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test if exception is thrown when extension `simpleXML` is not loaded
+     * Test if exception is thrown when extension `mbstring` is not loaded
      */
     public function testExceptionMBString()
     {

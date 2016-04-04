@@ -1,7 +1,6 @@
 {
   "name": "vipnytt/sitemapparser",
   "description": "XML Sitemap parser class compliant with the Sitemaps.org protocol.",
-  "version": "1.0.0",
   "keywords": [
     "sitemap",
     "sitemaps.org",

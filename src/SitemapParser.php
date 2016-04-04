@@ -146,7 +146,7 @@ class SitemapParser
             $response = gzdecode($response);
         }
         $sitemapJson = $this->generateXMLObject($response);
-        if ($sitemapJson === false) {
+        if ($sitemapJson instanceof SimpleXMLElement === false) {
             $this->parseString($response);
             return;
         }
@@ -239,13 +239,12 @@ class SitemapParser
      */
     protected function generateXMLObject($xml)
     {
-        libxml_use_internal_errors(true);
-        $doc = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
-        if ($doc === false) {
-            libxml_clear_errors();
+        try {
+            libxml_use_internal_errors(true);
+            return new SimpleXMLElement($xml, LIBXML_NOCDATA);
+        } catch (\Exception $e) {
             return false;
         }
-        return $doc;
     }
 
     /**

@@ -6,7 +6,7 @@ use vipnytt\SitemapParser;
 class ExceptionEncodingTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test if exception is thrown when extension `simpleXML` is not loaded
+     * Test if exception is thrown when trying to set encoding to `UTF-8`
      */
     public function testExceptionEncoding()
     {
