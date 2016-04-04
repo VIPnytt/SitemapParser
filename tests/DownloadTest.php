@@ -44,6 +44,9 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'http://php.net/sitemap.xml',
+            ],
+            [
+                'https://www.yahoo.com/news/sitemaps/news-sitemap_index_US_en-US.xml.gz',
             ]
         ];
     }

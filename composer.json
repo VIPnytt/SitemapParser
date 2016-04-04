@@ -36,8 +36,12 @@
   },
   "autoload": {
     "psr-4": {
-      "vipnytt\\": "src/",
-      "vipnytt\\test\\": "test/"
+      "vipnytt\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "vipnytt\\SitemapParser\\Tests\\": "tests/"
     }
   }
 }

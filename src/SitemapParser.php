@@ -146,9 +146,7 @@ class SitemapParser
             $response = gzdecode($response);
         }
         $sitemapJson = $this->generateXMLObject($response);
-        if ($sitemapJson === false && empty($response)) {
-            throw new SitemapParserException("The XML found on the given URL doesn't appear to be valid according to simplexml_load_string/libxml");
-        } elseif ($sitemapJson === false) {
+        if ($sitemapJson === false) {
             $this->parseString($response);
             return;
         }
@@ -188,9 +186,6 @@ class SitemapParser
             }
             $client = new GuzzleHttp\Client();
             $res = $client->request('GET', $this->currentURL, $this->config['guzzle']);
-            if ($res->getStatusCode() < 200 || $res->getStatusCode() >= 400) {
-                throw new SitemapParserException('The server responds with a bad status code: ' . $res->getStatusCode());
-            }
             return $res->getBody();
         } catch (GuzzleHttp\Exception\TransferException $e) {
             throw new SitemapParserException($e->getMessage());
