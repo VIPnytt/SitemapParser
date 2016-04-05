@@ -8,16 +8,28 @@ class StringTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider generateDataForTest
      * @param string $url URL
-     * @param string $body URL body content
-     * @param array $result Test result to match
      */
-    public function testString($url, $body, $result)
+    public function testString($url)
     {
         $parser = new SitemapParser('SitemapParser', ['strict' => false]);
         $this->assertInstanceOf('vipnytt\SitemapParser', $parser);
-        $parser->parse($url, $body);
-        $this->assertEquals($result['sitemaps'], $parser->getSitemaps());
-        $this->assertEquals($result['urls'], $parser->getURLs());
+        $parser->parse($url);
+        $this->assertTrue(is_array($parser->getSitemaps()));
+        $this->assertTrue(is_array($parser->getURLs()));
+        $this->assertTrue(count($parser->getSitemaps()) > 1);
+        $this->assertTrue(count($parser->getURLs()) >= 1000);
+        foreach ($parser->getSitemaps() as $url => $tags) {
+            $this->assertTrue(is_string($url));
+            $this->assertTrue(is_array($tags));
+            $this->assertTrue($url === $tags['loc']);
+            $this->assertNotFalse(filter_var($url, FILTER_VALIDATE_URL));
+        }
+        foreach ($parser->getURLs() as $url => $tags) {
+            $this->assertTrue(is_string($url));
+            $this->assertTrue(is_array($tags));
+            $this->assertTrue($url === $tags['loc']);
+            $this->assertNotFalse(filter_var($url, FILTER_VALIDATE_URL));
+        }
     }
 
     /**
@@ -29,38 +41,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'http://www.example.com/sitemap.txt',
-                <<<TEXT
-http://www.example.com/sitemap1.xml
-http://www.example.com/sitemap2.xml http://www.example.com/sitemap3.xml.gz
-http://www.example.com/page1/
-http://www.example.com/page2/ http://www.example.com/page3/file.gz
-TEXT
-                ,
-                $result = [
-                    'sitemaps' => [
-                        'http://www.example.com/sitemap1.xml' => [
-                            'loc' => 'http://www.example.com/sitemap1.xml',
-                        ],
-                        'http://www.example.com/sitemap2.xml' => [
-                            'loc' => 'http://www.example.com/sitemap2.xml',
-                        ],
-                        'http://www.example.com/sitemap3.xml.gz' => [
-                            'loc' => 'http://www.example.com/sitemap3.xml.gz',
-                        ],
-                    ],
-                    'urls' => [
-                        'http://www.example.com/page1/' => [
-                            'loc' => 'http://www.example.com/page1/',
-                        ],
-                        'http://www.example.com/page2/' => [
-                            'loc' => 'http://www.example.com/page2/',
-                        ],
-                        'http://www.example.com/page3/file.gz' => [
-                            'loc' => 'http://www.example.com/page3/file.gz',
-                        ],
-                    ],
-                ],
+                'https://www.xml-sitemaps.com/urllist.txt',
             ]
         ];
     }

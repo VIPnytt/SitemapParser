@@ -33,7 +33,8 @@ class RobotsTxtTest extends \PHPUnit_Framework_TestCase
                 <<<ROBOTSTXT
 User-agent: *
 Disallow: /
-Sitemap: http://www.example.com/sitemap.xml
+#Sitemap:http://www.example.com/sitemap.xml.gz
+  Sitemap:http://www.example.com/sitemap.xml#comment
 ROBOTSTXT
                 ,
                 $result = [

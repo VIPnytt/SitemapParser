@@ -17,6 +17,41 @@ use vipnytt\SitemapParser\Exceptions\SitemapParserException;
 class SitemapParser
 {
     /**
+     * Default encoding
+     */
+    const ENCODING = 'UTF-8';
+
+    /**
+     * XML file extension
+     */
+    const XML_EXTENSION = '.xml';
+
+    /**
+     * Compressed XML file extension
+     */
+    const XML_EXTENSION_COMPRESSED = '.xml.gz';
+
+    /**
+     * XML Sitemap tag
+     */
+    const XML_TAG_SITEMAP = 'sitemap';
+
+    /**
+     * XML URL tag
+     */
+    const XML_TAG_URL = 'url';
+
+    /**
+     * Robots.txt path
+     */
+    const ROBOTSTXT_PATH = '/robots.txt';
+
+    /**
+     * Robots.txt sitemap prefix
+     */
+    const ROBOTSTXT_PREFIX = 'Sitemap:';
+
+    /**
      * User-Agent to send with every HTTP(S) request
      * @var string
      */
@@ -74,8 +109,8 @@ class SitemapParser
             throw new SitemapParserException('The extension `mbstring` must be installed and loaded for this library');
         }
         mb_language("uni");
-        if (!mb_internal_encoding('UTF-8')) {
-            throw new SitemapParserException('Unable to set internal character encoding to UTF-8');
+        if (!mb_internal_encoding(self::ENCODING)) {
+            throw new SitemapParserException('Unable to set internal character encoding to `' . self::ENCODING . '`');
         }
         $this->userAgent = $userAgent;
         $this->config = $config;
@@ -137,7 +172,7 @@ class SitemapParser
         $this->currentURL = $url;
         $response = (is_string($urlContent)) ? $urlContent : $this->getContent();
         $this->history[] = $this->currentURL;
-        if (parse_url($this->currentURL, PHP_URL_PATH) == '/robots.txt') {
+        if (parse_url($this->currentURL, PHP_URL_PATH) === self::ROBOTSTXT_PATH) {
             $this->parseRobotstxt($response);
             return;
         }
@@ -150,12 +185,8 @@ class SitemapParser
             $this->parseString($response);
             return;
         }
-        if (isset($sitemapJson->sitemap)) {
-            $this->parseJson('sitemap', $sitemapJson->sitemap);
-        }
-        if (isset($sitemapJson->url)) {
-            $this->parseJson('url', $sitemapJson->url);
-        }
+        $this->parseJson(self::XML_TAG_SITEMAP, $sitemapJson);
+        $this->parseJson(self::XML_TAG_URL, $sitemapJson);
     }
 
     /**
@@ -196,17 +227,22 @@ class SitemapParser
      * Search for sitemaps in the robots.txt content
      *
      * @param string $robotstxt
-     * @return void
+     * @return bool
      */
     protected function parseRobotstxt($robotstxt)
     {
-        preg_match_all('#Sitemap:*(.*)#', $robotstxt, $match);
-        if (isset($match[1])) {
-            foreach ($match[1] as $sitemap) {
-                $sitemap = trim($sitemap);
-                $this->addArray('sitemap', ['loc' => $sitemap]);
+        $array = array_map('trim', preg_split('/\R/', $robotstxt));
+        foreach ($array as $line) {
+            if (mb_stripos($line, self::ROBOTSTXT_PREFIX) === 0) {
+                $url = mb_substr($line, mb_strlen(self::ROBOTSTXT_PREFIX));
+                if (($pos = mb_stripos($url, '#')) !== false) {
+                    $url = mb_substr($url, 0, $pos);
+                }
+                $url = preg_split('/\s+/', trim($url))[0];
+                $this->addArray('sitemap', ['loc' => $url]);
             }
         }
+        return true;
     }
 
     /**
@@ -220,10 +256,10 @@ class SitemapParser
     {
         if (isset($array['loc']) && filter_var($array['loc'], FILTER_VALIDATE_URL) !== false) {
             switch ($type) {
-                case 'sitemap':
+                case self::XML_TAG_SITEMAP:
                     $this->sitemaps[$array['loc']] = $array;
                     return true;
-                case 'url':
+                case self::XML_TAG_URL:
                     $this->urls[$array['loc']] = $array;
                     return true;
             }
@@ -248,7 +284,7 @@ class SitemapParser
     }
 
     /**
-     * Parse plain text
+     * Parse line separated text string
      *
      * @param string $string
      * @return bool
@@ -256,19 +292,16 @@ class SitemapParser
     protected function parseString($string)
     {
         if (!isset($this->config['strict']) || $this->config['strict'] !== false) {
-            // Strings are not part of any sitemap standard
+            // Strings are not part of any documented sitemap standard
             return false;
         }
-        $offset = 0;
-        while (preg_match('/(\S+)/', $string, $match, PREG_OFFSET_CAPTURE, $offset)) {
-            $offset = $match[0][1] + strlen($match[0][0]);
-            if (filter_var($match[0][0], FILTER_VALIDATE_URL) !== false) {
-                if ($this->isSitemapURL($match[0][0])) {
-                    $this->addArray('sitemap', ['loc' => $match[0][0]]);
-                    continue;
-                }
-                $this->addArray('url', ['loc' => $match[0][0]]);
+        $array = array_map('trim', preg_split('/\R/', $string));
+        foreach ($array as $line) {
+            if ($this->isSitemapURL($line)) {
+                $this->addArray(self::XML_TAG_SITEMAP, ['loc' => $line]);
+                continue;
             }
+            $this->addArray(self::XML_TAG_URL, ['loc' => $line]);
         }
         return true;
     }
@@ -283,8 +316,8 @@ class SitemapParser
     {
         $path = parse_url($url, PHP_URL_PATH);
         return filter_var($url, FILTER_VALIDATE_URL) !== false && (
-            substr($path, -4) === ".xml" ||
-            substr($path, -7) === '.xml.gz'
+            substr($path, -strlen(self::XML_EXTENSION)) === self::XML_EXTENSION ||
+            substr($path, -strlen(self::XML_EXTENSION_COMPRESSED)) === self::XML_EXTENSION_COMPRESSED
         );
     }
 
@@ -293,13 +326,17 @@ class SitemapParser
      *
      * @param string $type Sitemap or URL
      * @param \SimpleXMLElement $json object
-     * @return void
+     * @return bool
      */
     protected function parseJson($type, $json)
     {
-        foreach ($json as $url) {
+        if (!isset($json->$type)) {
+            return false;
+        }
+        foreach ($json->$type as $url) {
             $this->addArray($type, (array)$url);
         }
+        return true;
     }
 
     /**

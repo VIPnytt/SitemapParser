@@ -31,9 +31,11 @@ class StrictTest extends \PHPUnit_Framework_TestCase
                 'http://www.example.com/sitemap.txt',
                 <<<TEXT
 http://www.example.com/sitemap1.xml
-http://www.example.com/sitemap2.xml http://www.example.com/sitemap3.xml.gz
+http://www.example.com/sitemap2.xml
+http://www.example.com/sitemap3.xml.gz
 http://www.example.com/page1/
-http://www.example.com/page2/ http://www.example.com/page3/file.gz
+http://www.example.com/page2/
+http://www.example.com/page3/file.gz
 TEXT
             ]
         ];

@@ -36,7 +36,7 @@ Then run `composer update`.
 - XML `.xml`
 - Compressed XML `.xml.gz`
 - Robots.txt rule sheet `robots.txt`
-- Plain text
+- Line separated list in plain text
 
 
 ## Getting Started
@@ -113,17 +113,17 @@ try {
 }
 ```
 
-### Parsing of plain text strings
-__Note: This is disabled by default__ to avoid false positives when parsing XML documents but get something else in return.
+### Parsing of line separated text strings
+__Note: This is disabled by default__ to avoid false positives when expecting XML, but get some plain text in return.
 
-To disable `strict` standards, simply pass this configuration into the constructor: ````['strict' => false]````.
+To disable `strict` standards, simply pass this configuration to constructor parameter #2: ````['strict' => false]````.
 ```php
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
 
 try {
     $parser = new SitemapParser('MyCustomUserAgent', ['strict' => false]);
-    $parser->parse('http://www.example.com/?format=sitemap');
+    $parser->parse('https://www.xml-sitemaps.com/urllist.txt');
     foreach ($parser->getSitemaps() as $url => $tags) {
             echo $url . '<br>';
     }
