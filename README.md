@@ -11,8 +11,10 @@ An easy-to-use PHP library to parse XML Sitemaps compliant with the [Sitemaps.or
 
 The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard and is supported by Google, Bing, Yahoo, Ask and many others.
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/2d3fbd49-66c4-4ab9-9007-aaeec6956d30/big.png)](https://insight.sensiolabs.com/projects/2d3fbd49-66c4-4ab9-9007-aaeec6956d30)
+
 ## Installation
-The library is available for install via Composer. To install, add the requirement to your `composer.json` file, like this:
+The library is available for install via [Composer](https://getcomposer.org). To install, add this to your `composer.json` file:
 ```json
 {
     "require": {
@@ -20,10 +22,7 @@ The library is available for install via Composer. To install, add the requireme
     }
 }
 ```
-
 Then run `composer update`.
-
-[Find out more about Composer here](https://getcomposer.org)
 
 ## Features
 - Basic parsing
@@ -70,14 +69,14 @@ try {
     foreach ($parser->getSitemaps() as $url => $tags) {
         echo 'Sitemap<br>';
         echo 'URL: ' . $url . '<br>';
-        echo 'LastMod: ' . @$tags['lastmod'] . '<br>';
+        echo 'LastMod: ' . $tags['lastmod'] . '<br>';
         echo '<hr>';
     }
     foreach ($parser->getURLs() as $url => $tags) {
         echo 'URL: ' . $url . '<br>';
-        echo 'LastMod: ' . @$tags['lastmod'] . '<br>';
-        echo 'ChangeFreq: ' . @$tags['changefreq'] . '<br>';
-        echo 'Priority: ' . @$tags['priority'] . '<br>';
+        echo 'LastMod: ' . $tags['lastmod'] . '<br>';
+        echo 'ChangeFreq: ' . $tags['changefreq'] . '<br>';
+        echo 'Priority: ' . $tags['priority'] . '<br>';
         echo '<hr>';
     }
 } catch (SitemapParserException $e) {
@@ -97,15 +96,15 @@ try {
     echo '<h2>Sitemaps</h2>';
     foreach ($parser->getSitemaps() as $url => $tags) {
         echo 'URL: ' . $url . '<br>';
-        echo 'LastMod: ' . @$tags['lastmod'] . '<br>';
+        echo 'LastMod: ' . $tags['lastmod'] . '<br>';
         echo '<hr>';
     }
     echo '<h2>URLs</h2>';
     foreach ($parser->getURLs() as $url => $tags) {
         echo 'URL: ' . $url . '<br>';
-        echo 'LastMod: ' . @$tags['lastmod'] . '<br>';
-        echo 'ChangeFreq: ' . @$tags['changefreq'] . '<br>';
-        echo 'Priority: ' . @$tags['priority'] . '<br>';
+        echo 'LastMod: ' . $tags['lastmod'] . '<br>';
+        echo 'ChangeFreq: ' . $tags['changefreq'] . '<br>';
+        echo 'Priority: ' . $tags['priority'] . '<br>';
         echo '<hr>';
     }
 } catch (SitemapParserException $e) {

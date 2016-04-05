@@ -27,14 +27,14 @@ try {
         foreach ($parser->getSitemaps() as $url => $tags) {
             echo 'Sitemap<br>';
             echo 'URL: ' . $url . '<br>';
-            echo 'LastMod: ' . @$tags['lastmod'] . '<br>';
+            echo 'LastMod: ' . $tags['lastmod'] . '<br>';
             echo '<hr>';
         }
         foreach ($parser->getURLs() as $url => $tags) {
             echo 'URL: ' . $url . '<br>';
-            echo 'LastMod: ' . @$tags['lastmod'] . '<br>';
-            echo 'ChangeFreq: ' . @$tags['changefreq'] . '<br>';
-            echo 'Priority: ' . @$tags['priority'] . '<br>';
+            echo 'LastMod: ' . $tags['lastmod'] . '<br>';
+            echo 'ChangeFreq: ' . $tags['changefreq'] . '<br>';
+            echo 'Priority: ' . $tags['priority'] . '<br>';
             echo '<hr>';
         }
     }

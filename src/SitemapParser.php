@@ -209,7 +209,7 @@ class SitemapParser
     protected function getContent()
     {
         if (!filter_var($this->currentURL, FILTER_VALIDATE_URL)) {
-            throw new SitemapParserException('Passed URL not valid according to filter_var function');
+            throw new SitemapParserException('Passed URL not valid according to the filter_var function');
         }
         try {
             if (!isset($this->config['guzzle']['headers']['User-Agent'])) {
@@ -257,14 +257,39 @@ class SitemapParser
         if (isset($array['loc']) && filter_var($array['loc'], FILTER_VALIDATE_URL) !== false) {
             switch ($type) {
                 case self::XML_TAG_SITEMAP:
-                    $this->sitemaps[$array['loc']] = $array;
+                    $tags = [
+                        'lastmod',
+                        'changefreq',
+                        'priority',
+                    ];
+                    $this->sitemaps[$array['loc']] = $this->fixMissingTags($tags, $array);
                     return true;
                 case self::XML_TAG_URL:
-                    $this->urls[$array['loc']] = $array;
+                    $tags = [
+                        'lastmod',
+                    ];
+                    $this->urls[$array['loc']] = $this->fixMissingTags($tags, $array);
                     return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Check for missing values and set them to null
+     *
+     * @param array $tags Tags check if exists
+     * @param array $array Array to check
+     * @return array
+     */
+    protected function fixMissingTags(array $tags, array $array)
+    {
+        foreach ($tags as $tag) {
+            if (empty($array)) {
+                $array[$tag] = null;
+            }
+        }
+        return $array;
     }
 
     /**
