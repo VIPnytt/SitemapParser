@@ -13,9 +13,8 @@ class StringTest extends \PHPUnit_Framework_TestCase
      */
     public function testString($url, $body, $result)
     {
-        $parser = new SitemapParser('SitemapParser');
+        $parser = new SitemapParser('SitemapParser', ['strict' => false]);
         $this->assertInstanceOf('vipnytt\SitemapParser', $parser);
-        $parser->setStrict(false);
         $parser->parse($url, $body);
         $this->assertEquals($result['sitemaps'], $parser->getSitemaps());
         $this->assertEquals($result['urls'], $parser->getURLs());
