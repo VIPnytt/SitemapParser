@@ -100,7 +100,7 @@ class SitemapParser
      * @param array $config Configuration options
      * @throws SitemapParserException
      */
-    public function __construct($userAgent = 'SitemapParser', $config = [])
+    public function __construct($userAgent = 'SitemapParser', array $config = [])
     {
         if (!extension_loaded('simplexml')) {
             throw new SitemapParserException('The extension `simplexml` must be installed and loaded for this library');
@@ -140,7 +140,7 @@ class SitemapParser
      *
      * @param array $urlArray
      */
-    public function addToQueue($urlArray)
+    public function addToQueue(array $urlArray)
     {
         foreach ($urlArray as $url) {
             $this->queue[] = $url;
@@ -252,7 +252,7 @@ class SitemapParser
      * @param array $array Tag array
      * @return bool
      */
-    protected function addArray($type, $array)
+    protected function addArray($type, array $array)
     {
         if (isset($array['loc']) && filter_var($array['loc'], FILTER_VALIDATE_URL) !== false) {
             switch ($type) {
@@ -328,7 +328,7 @@ class SitemapParser
      * @param \SimpleXMLElement $json object
      * @return bool
      */
-    protected function parseJson($type, $json)
+    protected function parseJson($type, \SimpleXMLElement $json)
     {
         if (!isset($json->$type)) {
             return false;
