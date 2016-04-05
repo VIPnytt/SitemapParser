@@ -113,6 +113,29 @@ try {
 }
 ```
 
+### Parsing of plain text strings
+__Note: This is disabled by default__ to avoid fake positives when parsing XML documents but get something else in return.
+
+To disable `strict` standards, simply do ````$parser->useStrict(false);````.
+```php
+use vipnytt\SitemapParser;
+use vipnytt\SitemapParser\Exceptions\SitemapParserException;
+
+try {
+    $parser = new SitemapParser('MyCustomUserAgent');
+    $parser->useStrict(false);
+    $parser->parse('http://www.example.com/?format=sitemap');
+    foreach ($parser->getSitemaps() as $url => $tags) {
+            echo $url . '<br>';
+    }
+    foreach ($parser->getURLs() as $url => $tags) {
+            echo $url . '<br>';
+    }
+} catch (SitemapParserException $e) {
+    echo $e->getMessage();
+}
+```
+
 ### Additional examples
 Even more examples available in the [examples](https://github.com/VIPnytt/SitemapParser/tree/master/examples) directory.
 

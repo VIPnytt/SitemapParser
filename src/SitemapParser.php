@@ -56,7 +56,7 @@ class SitemapParser
      * Current URL being parsed
      * @var null|string
      */
-    protected $currentURL = null;
+    protected $currentURL;
 
     /**
      * Constructor
@@ -77,8 +77,8 @@ class SitemapParser
         if (!mb_internal_encoding('UTF-8')) {
             throw new SitemapParserException('Unable to set internal character encoding to UTF-8');
         }
+        $this->userAgent = (isset($config['user-agent'])) ? $config['user-agent'] : $userAgent;
         $this->config = $config;
-        $this->userAgent = $userAgent;
     }
 
     /**
@@ -251,10 +251,14 @@ class SitemapParser
      * Parse plain text
      *
      * @param string $string
-     * @return void
+     * @return bool
      */
     protected function parseString($string)
     {
+        if ($this->config['strict']) {
+            // Strings are not part of any sitemap standard
+            return false;
+        }
         $offset = 0;
         while (preg_match('/(\S+)/', $string, $match, PREG_OFFSET_CAPTURE, $offset)) {
             $offset = $match[0][1] + strlen($match[0][0]);
@@ -266,6 +270,7 @@ class SitemapParser
                 $this->addArray('url', ['loc' => $match[0][0]]);
             }
         }
+        return true;
     }
 
     /**
@@ -295,6 +300,18 @@ class SitemapParser
         foreach ($json as $url) {
             $this->addArray($type, (array)$url);
         }
+    }
+
+    /**
+     * Strict standards
+     * Limit parsing to XML documents and robots.txt only
+     *
+     * @param bool $bool
+     * @return void
+     */
+    public function setStrict($bool = true)
+    {
+        $this->config['strict'] = $bool;
     }
 
     /**
