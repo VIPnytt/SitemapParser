@@ -13,23 +13,6 @@ The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard an
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/2d3fbd49-66c4-4ab9-9007-aaeec6956d30/big.png)](https://insight.sensiolabs.com/projects/2d3fbd49-66c4-4ab9-9007-aaeec6956d30)
 
-#### Requirements:
-- PHP [>=5.5](http://php.net/supported-versions.php)
-- PHP [mbstring](http://php.net/manual/en/book.mbstring.php) extension
-- PHP [libxml](http://php.net/manual/en/book.libxml.php) extension
-- PHP [SimpleXML](http://php.net/manual/en/book.simplexml.php) extension
-
-## Installation
-The library is available for install via [Composer](https://getcomposer.org). Just add this to your `composer.json` file:
-```json
-{
-    "require": {
-        "vipnytt/sitemapparser": "1.0.*"
-    }
-}
-```
-Then run `composer update`.
-
 ## Features
 - Basic parsing
 - Recursive parsing
@@ -41,8 +24,24 @@ Then run `composer update`.
 - XML `.xml`
 - Compressed XML `.xml.gz`
 - Robots.txt rule sheet `robots.txt`
-- Line separated list in plain text
+- Line separated text __[disabled by default]__
 
+#### Requirements:
+- PHP [>=5.6](http://php.net/supported-versions.php)
+- PHP [mbstring](http://php.net/manual/en/book.mbstring.php) extension
+- PHP [libxml](http://php.net/manual/en/book.libxml.php) extension _[enabled by default]_
+- PHP [SimpleXML](http://php.net/manual/en/book.simplexml.php) extension _[enabled by default]_
+
+## Installation
+The library is available for install via [Composer](https://getcomposer.org). Just add this to your `composer.json` file:
+```json
+{
+    "require": {
+        "vipnytt/sitemapparser": "1.0.*"
+    }
+}
+```
+Then run `composer update`.
 
 ## Getting Started
 
