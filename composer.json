@@ -26,8 +26,11 @@
     }
   ],
   "require": {
-    "php": ">=5.5.9",
-    "guzzlehttp/guzzle": "6.*"
+    "php": ">=5.5.0",
+    "guzzlehttp/guzzle": "6.*",
+    "ext-mbstring": "*",
+    "ext-simplexml": "*",
+    "lib-libxml": "*"
   },
   "require-dev": {
     "phpunit/phpunit": ">=3.7",

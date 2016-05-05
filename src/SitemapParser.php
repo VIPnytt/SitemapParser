@@ -4,6 +4,7 @@ namespace vipnytt;
 use GuzzleHttp;
 use SimpleXMLElement;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
+use vipnytt\SitemapParser\UrlParser;
 
 /**
  * SitemapParser class
@@ -16,6 +17,13 @@ use vipnytt\SitemapParser\Exceptions\SitemapParserException;
  */
 class SitemapParser
 {
+    use UrlParser;
+
+    /**
+     * Default User-Agent
+     */
+    const DEFAULT_USER_AGENT = 'SitemapParser';
+
     /**
      * Default encoding
      */
@@ -24,12 +32,12 @@ class SitemapParser
     /**
      * XML file extension
      */
-    const XML_EXTENSION = '.xml';
+    const XML_EXTENSION = 'xml';
 
     /**
      * Compressed XML file extension
      */
-    const XML_EXTENSION_COMPRESSED = '.xml.gz';
+    const XML_EXTENSION_COMPRESSED = 'xml.gz';
 
     /**
      * XML Sitemap tag
@@ -47,15 +55,10 @@ class SitemapParser
     const ROBOTSTXT_PATH = '/robots.txt';
 
     /**
-     * Robots.txt sitemap prefix
-     */
-    const ROBOTSTXT_PREFIX = 'Sitemap:';
-
-    /**
      * User-Agent to send with every HTTP(S) request
      * @var string
      */
-    protected $userAgent;
+    protected $userAgent = self::DEFAULT_USER_AGENT;
 
     /**
      * Configuration options
@@ -100,14 +103,8 @@ class SitemapParser
      * @param array $config Configuration options
      * @throws SitemapParserException
      */
-    public function __construct($userAgent = 'SitemapParser', array $config = [])
+    public function __construct($userAgent = self::DEFAULT_USER_AGENT, array $config = [])
     {
-        if (!extension_loaded('simplexml')) {
-            throw new SitemapParserException('The extension `simplexml` must be installed and loaded for this library');
-        }
-        if (!extension_loaded('mbstring')) {
-            throw new SitemapParserException('The extension `mbstring` must be installed and loaded for this library');
-        }
         mb_language("uni");
         if (!mb_internal_encoding(self::ENCODING)) {
             throw new SitemapParserException('Unable to set internal character encoding to `' . self::ENCODING . '`');
@@ -162,7 +159,7 @@ class SitemapParser
      * Parse
      *
      * @param string $url URL to parse
-     * @param string|null $urlContent URL body content (skip download)
+     * @param string|null $urlContent URL body content (provide to skip download)
      * @return void
      * @throws SitemapParserException
      */
@@ -172,7 +169,7 @@ class SitemapParser
         $this->currentURL = $url;
         $response = (is_string($urlContent)) ? $urlContent : $this->getContent();
         $this->history[] = $this->currentURL;
-        if (parse_url($this->currentURL, PHP_URL_PATH) === self::ROBOTSTXT_PATH) {
+        if ($this->urlValidate($this->currentURL) && parse_url($this->currentURL, PHP_URL_PATH) === self::ROBOTSTXT_PATH) {
             $this->parseRobotstxt($response);
             return;
         }
@@ -208,8 +205,9 @@ class SitemapParser
      */
     protected function getContent()
     {
-        if (!filter_var($this->currentURL, FILTER_VALIDATE_URL)) {
-            throw new SitemapParserException('Passed URL not valid according to the filter_var function');
+        $this->currentURL = $this->urlEncode($this->currentURL);
+        if (!$this->urlValidate($this->currentURL)) {
+            throw new SitemapParserException('Invalid URL');
         }
         try {
             if (!isset($this->config['guzzle']['headers']['User-Agent'])) {
@@ -231,15 +229,25 @@ class SitemapParser
      */
     protected function parseRobotstxt($robotstxt)
     {
-        $array = array_map('trim', preg_split('/\R/', $robotstxt));
-        foreach ($array as $line) {
-            if (mb_stripos($line, self::ROBOTSTXT_PREFIX) === 0) {
-                $url = mb_substr($line, mb_strlen(self::ROBOTSTXT_PREFIX));
-                if (($pos = mb_stripos($url, '#')) !== false) {
-                    $url = mb_substr($url, 0, $pos);
-                }
-                $url = preg_split('/\s+/', trim($url))[0];
-                $this->addArray('sitemap', ['loc' => $url]);
+        // Split lines into array
+        $lines = array_filter(array_map('trim', mb_split('\r\n|\n|\r', $robotstxt)));
+        // Parse each line individually
+        foreach ($lines as $line) {
+            // Remove comments
+            $line = mb_split('#', $line, 2)[0];
+            // Split by directive and rule
+            $pair = array_map('trim', mb_split(':', $line, 2));
+            // Check if the line contains a sitemap
+            if (
+                mb_strtolower($pair[0]) !== self::XML_TAG_SITEMAP ||
+                empty($pair[1])
+            ) {
+                // Line does not contain any supported directive
+                continue;
+            }
+            $url = $this->urlEncode($pair[1]);
+            if ($this->urlValidate($url)) {
+                $this->addArray(self::XML_TAG_SITEMAP, ['loc' => $url]);
             }
         }
         return true;
@@ -254,21 +262,17 @@ class SitemapParser
      */
     protected function addArray($type, array $array)
     {
-        if (isset($array['loc']) && filter_var($array['loc'], FILTER_VALIDATE_URL) !== false) {
+        if (!isset($array['loc'])) {
+            return false;
+        }
+        $array['loc'] = $this->urlEncode($array['loc']);
+        if ($this->urlValidate($array['loc'])) {
             switch ($type) {
                 case self::XML_TAG_SITEMAP:
-                    $tags = [
-                        'lastmod',
-                        'changefreq',
-                        'priority',
-                    ];
-                    $this->sitemaps[$array['loc']] = $this->fixMissingTags($tags, $array);
+                    $this->sitemaps[$array['loc']] = $this->fixMissingTags(['lastmod', 'changefreq', 'priority'], $array);
                     return true;
                 case self::XML_TAG_URL:
-                    $tags = [
-                        'lastmod',
-                    ];
-                    $this->urls[$array['loc']] = $this->fixMissingTags($tags, $array);
+                    $this->urls[$array['loc']] = $this->fixMissingTags(['lastmod'], $array);
                     return true;
             }
         }
@@ -320,7 +324,7 @@ class SitemapParser
             // Strings are not part of any documented sitemap standard
             return false;
         }
-        $array = array_map('trim', preg_split('/\R/', $string));
+        $array = array_filter(array_map('trim', mb_split('\r\n|\n|\r', $string)));
         foreach ($array as $line) {
             if ($this->isSitemapURL($line)) {
                 $this->addArray(self::XML_TAG_SITEMAP, ['loc' => $line]);
@@ -339,10 +343,10 @@ class SitemapParser
      */
     protected function isSitemapURL($url)
     {
-        $path = parse_url($url, PHP_URL_PATH);
-        return filter_var($url, FILTER_VALIDATE_URL) !== false && (
-            substr($path, -strlen(self::XML_EXTENSION)) === self::XML_EXTENSION ||
-            substr($path, -strlen(self::XML_EXTENSION_COMPRESSED)) === self::XML_EXTENSION_COMPRESSED
+        $path = parse_url($this->urlEncode($url), PHP_URL_PATH);
+        return $this->urlValidate($url) && (
+            mb_substr($path, -mb_strlen(self::XML_EXTENSION) - 1) == '.' . self::XML_EXTENSION ||
+            mb_substr($path, -mb_strlen(self::XML_EXTENSION_COMPRESSED) - 1) == '.' . self::XML_EXTENSION_COMPRESSED
         );
     }
 

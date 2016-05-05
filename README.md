@@ -13,8 +13,14 @@ The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard an
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/2d3fbd49-66c4-4ab9-9007-aaeec6956d30/big.png)](https://insight.sensiolabs.com/projects/2d3fbd49-66c4-4ab9-9007-aaeec6956d30)
 
+#### Requirements:
+- PHP [>=5.5](http://php.net/supported-versions.php)
+- PHP [mbstring](http://php.net/manual/en/book.mbstring.php) extension
+- PHP [libxml](http://php.net/manual/en/book.libxml.php) extension
+- PHP [SimpleXML](http://php.net/manual/en/book.simplexml.php) extension
+
 ## Installation
-The library is available for install via [Composer](https://getcomposer.org). To install, add this to your `composer.json` file:
+The library is available for install via [Composer](https://getcomposer.org). Just add this to your `composer.json` file:
 ```json
 {
     "require": {
@@ -136,7 +142,3 @@ try {
 
 ### Additional examples
 Even more examples available in the [examples](https://github.com/VIPnytt/SitemapParser/tree/master/examples) directory.
-
-## Final words
-
-Contributing is surely allowed! :-)
