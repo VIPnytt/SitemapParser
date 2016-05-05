@@ -20,13 +20,13 @@ The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard an
 - Proxy support
 - Offline parsing
 
-### Formats supported
+## Formats supported
 - XML `.xml`
 - Compressed XML `.xml.gz`
 - Robots.txt rule sheet `robots.txt`
-- Line separated text __[disabled by default]__
+- Line separated text _[disabled by default]_
 
-#### Requirements:
+## Requirements:
 - PHP [>=5.6](http://php.net/supported-versions.php)
 - PHP [mbstring](http://php.net/manual/en/book.mbstring.php) extension
 - PHP [libxml](http://php.net/manual/en/book.libxml.php) extension _[enabled by default]_
