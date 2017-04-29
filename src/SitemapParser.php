@@ -269,10 +269,10 @@ class SitemapParser
         if ($this->urlValidate($array['loc'])) {
             switch ($type) {
                 case self::XML_TAG_SITEMAP:
-                    $this->sitemaps[$array['loc']] = $this->fixMissingTags(['lastmod', 'changefreq', 'priority'], $array);
+                    $this->sitemaps[$array['loc']] = $this->fixMissingTags(['lastmod'], $array);
                     return true;
                 case self::XML_TAG_URL:
-                    $this->urls[$array['loc']] = $this->fixMissingTags(['lastmod'], $array);
+                    $this->urls[$array['loc']] = $this->fixMissingTags(['lastmod', 'changefreq', 'priority'], $array);
                     return true;
             }
         }
@@ -289,7 +289,7 @@ class SitemapParser
     protected function fixMissingTags(array $tags, array $array)
     {
         foreach ($tags as $tag) {
-            if (empty($array)) {
+            if (empty($array[$tag])) {
                 $array[$tag] = null;
             }
         }
