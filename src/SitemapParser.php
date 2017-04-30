@@ -22,7 +22,7 @@ class SitemapParser
     /**
      * Default User-Agent
      */
-    const DEFAULT_USER_AGENT = 'SitemapParser';
+    const DEFAULT_USER_AGENT = 'SitemapParser-VIPnytt/1.0 (+https://github.com/VIPnytt/SitemapParser/blob/master/README.md)';
 
     /**
      * Default encoding
@@ -58,7 +58,7 @@ class SitemapParser
      * User-Agent to send with every HTTP(S) request
      * @var string
      */
-    protected $userAgent = self::DEFAULT_USER_AGENT;
+    protected $userAgent;
 
     /**
      * Configuration options

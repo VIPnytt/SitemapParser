@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/VIPnytt/SitemapParser.svg?branch=master)](https://travis-ci.org/VIPnytt/X-Robots-Tag-parser)
+[![Build Status](https://travis-ci.org/VIPnytt/SitemapParser.svg?branch=master)](https://travis-ci.org/VIPnytt/SitemapParser)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/VIPnytt/SitemapParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/VIPnytt/SitemapParser/?branch=master)
 [![Code Climate](https://codeclimate.com/github/VIPnytt/SitemapParser/badges/gpa.svg)](https://codeclimate.com/github/VIPnytt/SitemapParser)
 [![Test Coverage](https://codeclimate.com/github/VIPnytt/SitemapParser/badges/coverage.svg)](https://codeclimate.com/github/VIPnytt/SitemapParser/coverage)
@@ -16,28 +16,29 @@ The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard an
 ## Features
 - Basic parsing
 - Recursive parsing
+- String parsing
 - Custom User-Agent string
 - Proxy support
-- Offline parsing
 
 ## Formats supported
 - XML `.xml`
 - Compressed XML `.xml.gz`
 - Robots.txt rule sheet `robots.txt`
-- Line separated text _[disabled by default]_
+- Line separated text _(disabled by default)_
 
 ## Requirements:
-- PHP [>=5.6](http://php.net/supported-versions.php)
-- PHP [mbstring](http://php.net/manual/en/book.mbstring.php) extension
-- PHP [libxml](http://php.net/manual/en/book.libxml.php) extension _[enabled by default]_
-- PHP [SimpleXML](http://php.net/manual/en/book.simplexml.php) extension _[enabled by default]_
+- PHP [5.6 or 7.0+](http://php.net/supported-versions.php), alternatively [HHVM](http://hhvm.com)
+- PHP extensions:
+  - [mbstring](http://php.net/manual/en/book.mbstring.php)
+  - [libxml](http://php.net/manual/en/book.libxml.php) _(enabled by default)_
+  - [SimpleXML](http://php.net/manual/en/book.simplexml.php) _(enabled by default)_
 
 ## Installation
 The library is available for install via [Composer](https://getcomposer.org). Just add this to your `composer.json` file:
 ```json
 {
     "require": {
-        "vipnytt/sitemapparser": "1.0.*"
+        "vipnytt/sitemapparser": "^1.0"
     }
 }
 ```
@@ -118,7 +119,7 @@ try {
 ```
 
 ### Parsing of line separated text strings
-__Note: This is disabled by default__ to avoid false positives when expecting XML, but get some plain text in return.
+__Note:__ This is __disabled by default__ to avoid false positives when expecting XML, but fetches plain text instead.
 
 To disable `strict` standards, simply pass this configuration to constructor parameter #2: ````['strict' => false]````.
 ```php
@@ -141,3 +142,17 @@ try {
 
 ### Additional examples
 Even more examples available in the [examples](https://github.com/VIPnytt/SitemapParser/tree/master/examples) directory.
+
+## Configuration
+Available configuration options, with their default values:
+```php
+$config = [
+    'strict' => true, // (bool) Disallow parsing of line-separated plain text
+    'guzzle' => [
+        // GuzzleHttp request options
+        // http://docs.guzzlephp.org/en/latest/request-options.html
+    ],
+];
+$parser = new SitemapParser('MyCustomUserAgent', $config);
+```
+_If an User-agent also is set using the GuzzleHttp request options, it receives the highest priority and replaces the other User-agent._  

@@ -1,9 +1,10 @@
 <?php
 namespace vipnytt\SitemapParser\Tests;
 
+use PHPUnit\Framework\TestCase;
 use vipnytt\SitemapParser;
 
-class RecursiveTest extends \PHPUnit_Framework_TestCase
+class RecursiveTest extends TestCase
 {
     /**
      * @dataProvider generateDataForTest

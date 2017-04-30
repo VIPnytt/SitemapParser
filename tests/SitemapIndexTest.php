@@ -1,9 +1,10 @@
 <?php
 namespace vipnytt\SitemapParser\Tests;
 
+use PHPUnit\Framework\TestCase;
 use vipnytt\SitemapParser;
 
-class SitemapIndexTest extends \PHPUnit_Framework_TestCase
+class SitemapIndexTest extends TestCase
 {
     /**
      * @dataProvider generateDataForTest
