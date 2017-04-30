@@ -119,7 +119,7 @@ try {
 ```
 
 ### Parsing of line separated text strings
-__Note: This is disabled by default__ to avoid false positives when expecting XML, but get some plain text in return.
+__Note:__ This is __disabled by default__ to avoid false positives when expecting XML, but fetches plain text instead.
 
 To disable `strict` standards, simply pass this configuration to constructor parameter #2: ````['strict' => false]````.
 ```php
@@ -143,11 +143,11 @@ try {
 ### Additional examples
 Even more examples available in the [examples](https://github.com/VIPnytt/SitemapParser/tree/master/examples) directory.
 
-### Configuration
-All available configuration options:
+## Configuration
+Available configuration options, with their default values:
 ```php
 $config = [
-    'strict' => false, // (bool) Parse line-separated plain text
+    'strict' => true, // (bool) Disallow parsing of line-separated plain text
     'guzzle' => [
         // GuzzleHttp request options
         // http://docs.guzzlephp.org/en/latest/request-options.html
@@ -155,4 +155,4 @@ $config = [
 ];
 $parser = new SitemapParser('MyCustomUserAgent', $config);
 ```
-Note: _If an User-agent also is set using the GuzzleHttp request options, it replaces the provided User-agent._  
+_If an User-agent also is set using the GuzzleHttp request options, it receives the highest priority and replaces the other User-agent._  
