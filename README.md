@@ -155,4 +155,4 @@ $config = [
 ];
 $parser = new SitemapParser('MyCustomUserAgent', $config);
 ```
-_If an User-agent also is set using the GuzzleHttp request options, it receives the highest priority and replaces the other User-agent._  
+_If an User-agent also is set using the GuzzleHttp request options, it receives the highest priority and replaces the other User-agent._
