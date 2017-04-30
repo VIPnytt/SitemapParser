@@ -1,9 +1,10 @@
 <?php
 namespace vipnytt\SitemapParser\Tests;
 
+use PHPUnit\Framework\TestCase;
 use vipnytt\SitemapParser;
 
-class RobotsTxtTest extends \PHPUnit_Framework_TestCase
+class RobotsTxtTest extends TestCase
 {
     /**
      * @dataProvider generateDataForTest
@@ -40,6 +41,7 @@ ROBOTSTXT
                 $result = [
                     'http://www.example.com/sitemap.xml' => [
                         'loc' => 'http://www.example.com/sitemap.xml',
+                        'lastmod' => null,
                     ],
                 ],
             ]

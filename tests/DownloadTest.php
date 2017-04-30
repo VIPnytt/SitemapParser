@@ -1,9 +1,10 @@
 <?php
 namespace vipnytt\SitemapParser\Tests;
 
+use PHPUnit\Framework\TestCase;
 use vipnytt\SitemapParser;
 
-class DownloadTest extends \PHPUnit_Framework_TestCase
+class DownloadTest extends TestCase
 {
     /**
      * @dataProvider generateDataForTest

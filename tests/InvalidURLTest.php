@@ -1,9 +1,10 @@
 <?php
 namespace vipnytt\SitemapParser\Tests;
 
+use PHPUnit\Framework\TestCase;
 use vipnytt\SitemapParser;
 
-class InvalidURLTest extends \PHPUnit_Framework_TestCase
+class InvalidURLTest extends TestCase
 {
     /**
      * @dataProvider generateDataForTest

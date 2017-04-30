@@ -1,9 +1,10 @@
 <?php
 namespace vipnytt\SitemapParser\Tests;
 
+use PHPUnit\Framework\TestCase;
 use vipnytt\SitemapParser;
 
-class ExceptionEncodingTest extends \PHPUnit_Framework_TestCase
+class ExceptionEncodingTest extends TestCase
 {
     /**
      * Test if exception is thrown when trying to set encoding to `UTF-8`

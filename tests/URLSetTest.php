@@ -1,9 +1,10 @@
 <?php
 namespace vipnytt\SitemapParser\Tests;
 
+use PHPUnit\Framework\TestCase;
 use vipnytt\SitemapParser;
 
-class URLSetTest extends \PHPUnit_Framework_TestCase
+class URLSetTest extends TestCase
 {
     /**
      * @dataProvider generateDataForTest
@@ -71,20 +72,26 @@ XMLSITEMAP
                     'http://www.example.com/catalog?item=12&desc=vacation_hawaii' => [
                         'loc' => 'http://www.example.com/catalog?item=12&desc=vacation_hawaii',
                         'changefreq' => 'weekly',
+                        'lastmod' => null,
+                        'priority' => null,
                     ],
                     'http://www.example.com/catalog?item=73&desc=vacation_new_zealand' => [
                         'loc' => 'http://www.example.com/catalog?item=73&desc=vacation_new_zealand',
                         'lastmod' => '2004-12-23',
                         'changefreq' => 'weekly',
+                        'priority' => null,
                     ],
                     'http://www.example.com/catalog?item=74&desc=vacation_newfoundland' => [
                         'loc' => 'http://www.example.com/catalog?item=74&desc=vacation_newfoundland',
                         'lastmod' => '2004-12-23T18:00:15+00:00',
                         'priority' => '0.3',
+                        'changefreq' => null,
                     ],
                     'http://www.example.com/catalog?item=83&desc=vacation_usa' => [
                         'loc' => 'http://www.example.com/catalog?item=83&desc=vacation_usa',
                         'lastmod' => '2004-11-23',
+                        'changefreq' => null,
+                        'priority' => null,
                     ],
                 ]
             ]
