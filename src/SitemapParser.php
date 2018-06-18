@@ -265,7 +265,7 @@ class SitemapParser
         if (!isset($array['loc'])) {
             return false;
         }
-        $array['loc'] = $this->urlEncode($array['loc']);
+        $array['loc'] = $this->urlEncode(trim($array['loc']));
         if ($this->urlValidate($array['loc'])) {
             switch ($type) {
                 case self::XML_TAG_SITEMAP:
