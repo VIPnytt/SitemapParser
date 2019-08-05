@@ -304,6 +304,10 @@ class SitemapParser
      */
     protected function generateXMLObject($xml)
     {
+        // strip XML comments from files
+        // if they occur at the beginning of the file it will invalidate the XML
+        // this occurs with certain versions of Yoast
+        $xml = preg_replace('/\s*\<\!\-\-((?!\-\-\>)[\s\S])*\-\-\>\s*/', '', (string) $xml);
         try {
             libxml_use_internal_errors(true);
             return new SimpleXMLElement($xml, LIBXML_NOCDATA);
