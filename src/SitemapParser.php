@@ -217,7 +217,9 @@ class SitemapParser
             $res = $client->request('GET', $this->currentURL, $this->config['guzzle']);
             return $res->getBody();
         } catch (GuzzleHttp\Exception\TransferException $e) {
-            throw new SitemapParserException($e->getMessage());
+            if (stripos($e->getMessage(), 'cURL error 6:') === false && $e->getCode() != 404) {
+                throw new SitemapParserException($e->getMessage());
+            }
         }
     }
 
