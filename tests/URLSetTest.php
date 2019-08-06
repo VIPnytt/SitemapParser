@@ -1,4 +1,5 @@
 <?php
+
 namespace vipnytt\SitemapParser\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -25,8 +26,7 @@ class URLSetTest extends TestCase
      * Generate test data
      * @return array
      */
-    public
-    function generateDataForTest()
+    public function generateDataForTest()
     {
         return [
             [

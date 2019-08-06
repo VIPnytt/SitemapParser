@@ -1,9 +1,10 @@
 <?php
+
 namespace vipnytt;
 
 use GuzzleHttp;
 use SimpleXMLElement;
-use vipnytt\SitemapParser\Exceptions\SitemapParserException;
+use vipnytt\SitemapParser\Exceptions;
 use vipnytt\SitemapParser\UrlParser;
 
 /**
@@ -101,13 +102,13 @@ class SitemapParser
      *
      * @param string $userAgent User-Agent to send with every HTTP(S) request
      * @param array $config Configuration options
-     * @throws SitemapParserException
+     * @throws Exceptions\SitemapParserException
      */
     public function __construct($userAgent = self::DEFAULT_USER_AGENT, array $config = [])
     {
         mb_language("uni");
         if (!mb_internal_encoding(self::ENCODING)) {
-            throw new SitemapParserException('Unable to set internal character encoding to `' . self::ENCODING . '`');
+            throw new Exceptions\SitemapParserException('Unable to set internal character encoding to `' . self::ENCODING . '`');
         }
         $this->userAgent = $userAgent;
         $this->config = $config;
@@ -118,7 +119,7 @@ class SitemapParser
      *
      * @param string $url
      * @return void
-     * @throws SitemapParserException
+     * @throws Exceptions\SitemapParserException
      */
     public function parseRecursive($url)
     {
@@ -126,7 +127,12 @@ class SitemapParser
         while (count($todo = $this->getQueue()) > 0) {
             $sitemaps = $this->sitemaps;
             $urls = $this->urls;
-            $this->parse($todo[0]);
+            try {
+                $this->parse($todo[0]);
+            } catch (Exceptions\TransferException $e) {
+                // Keep crawling
+                continue;
+            }
             $this->sitemaps = array_merge_recursive($sitemaps, $this->sitemaps);
             $this->urls = array_merge_recursive($urls, $this->urls);
         }
@@ -161,14 +167,15 @@ class SitemapParser
      * @param string $url URL to parse
      * @param string|null $urlContent URL body content (provide to skip download)
      * @return void
-     * @throws SitemapParserException
+     * @throws Exceptions\TransferException
+     * @throws Exceptions\SitemapParserException
      */
     public function parse($url, $urlContent = null)
     {
         $this->clean();
         $this->currentURL = $url;
-        $response = (is_string($urlContent)) ? $urlContent : $this->getContent();
         $this->history[] = $this->currentURL;
+        $response = is_string($urlContent) ? $urlContent : $this->getContent();
         if ($this->urlValidate($this->currentURL) && parse_url($this->currentURL, PHP_URL_PATH) === self::ROBOTSTXT_PATH) {
             $this->parseRobotstxt($response);
             return;
@@ -201,13 +208,14 @@ class SitemapParser
      * Request the body content of an URL
      *
      * @return string Raw body content
-     * @throws SitemapParserException
+     * @throws Exceptions\TransferException
+     * @throws Exceptions\SitemapParserException
      */
     protected function getContent()
     {
         $this->currentURL = $this->urlEncode($this->currentURL);
         if (!$this->urlValidate($this->currentURL)) {
-            throw new SitemapParserException('Invalid URL');
+            throw new Exceptions\SitemapParserException('Invalid URL');
         }
         try {
             if (!isset($this->config['guzzle']['headers']['User-Agent'])) {
@@ -217,9 +225,9 @@ class SitemapParser
             $res = $client->request('GET', $this->currentURL, $this->config['guzzle']);
             return $res->getBody();
         } catch (GuzzleHttp\Exception\TransferException $e) {
-            if (stripos($e->getMessage(), 'cURL error 6:') === false && $e->getCode() != 404) {
-                throw new SitemapParserException($e->getMessage());
-            }
+            throw new Exceptions\TransferException('Unable to fetch URL contents', 0, $e);
+        } catch (GuzzleHttp\Exception\GuzzleException $e) {
+            throw new Exceptions\SitemapParserException('GuzzleHttp exception', 0, $e);
         }
     }
 
@@ -309,7 +317,7 @@ class SitemapParser
         // strip XML comments from files
         // if they occur at the beginning of the file it will invalidate the XML
         // this occurs with certain versions of Yoast
-        $xml = preg_replace('/\s*\<\!\-\-((?!\-\-\>)[\s\S])*\-\-\>\s*/', '', (string) $xml);
+        $xml = preg_replace('/\s*\<\!\-\-((?!\-\-\>)[\s\S])*\-\-\>\s*/', '', (string)$xml);
         try {
             libxml_use_internal_errors(true);
             return new SimpleXMLElement($xml, LIBXML_NOCDATA);
@@ -351,9 +359,9 @@ class SitemapParser
     {
         $path = parse_url($this->urlEncode($url), PHP_URL_PATH);
         return $this->urlValidate($url) && (
-            mb_substr($path, -mb_strlen(self::XML_EXTENSION) - 1) == '.' . self::XML_EXTENSION ||
-            mb_substr($path, -mb_strlen(self::XML_EXTENSION_COMPRESSED) - 1) == '.' . self::XML_EXTENSION_COMPRESSED
-        );
+                mb_substr($path, -mb_strlen(self::XML_EXTENSION) - 1) == '.' . self::XML_EXTENSION ||
+                mb_substr($path, -mb_strlen(self::XML_EXTENSION_COMPRESSED) - 1) == '.' . self::XML_EXTENSION_COMPRESSED
+            );
     }
 
     /**

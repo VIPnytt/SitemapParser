@@ -1,4 +1,5 @@
 <?php
+
 namespace vipnytt\SitemapParser;
 
 /**

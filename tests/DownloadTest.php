@@ -36,8 +36,7 @@ class DownloadTest extends TestCase
      * Generate test data
      * @return array
      */
-    public
-    function generateDataForTest()
+    public function generateDataForTest()
     {
         return [
             [

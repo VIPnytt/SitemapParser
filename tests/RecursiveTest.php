@@ -1,4 +1,5 @@
 <?php
+
 namespace vipnytt\SitemapParser\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -36,11 +37,18 @@ class RecursiveTest extends TestCase
      * Generate test data
      * @return array
      */
-    public
-    function generateDataForTest()
+    public function generateDataForTest()
     {
         return [
             [
+                'https://edenapartmentsqueenanne.com/sitemap_index.xml',
+                'https://livingnongmo.org/sitemap.xml',
+                'https://loganwestom.com/sitemap_index.xml',
+                'https://sawyerflats.com/sitemap.xml',
+                'https://www.bellinghambaymarathon.org/sitemap_index.xml',
+                'https://www.coachforteens.com/sitemap_index.xml',
+                'https://www.hallerpostapts.com/sitemap_index.xml',
+                'https://www.nongmoproject.org/sitemap.xml',
                 'https://www.xml-sitemaps.com/robots.txt',
             ]
         ];
