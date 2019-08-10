@@ -146,7 +146,10 @@ class SitemapParser
     public function addToQueue(array $urlArray)
     {
         foreach ($urlArray as $url) {
-            $this->queue[] = $url;
+            $url = $this->urlEncode($url);
+            if ($this->urlValidate($url)) {
+                $this->queue[] = $url;
+            }
         }
     }
 
@@ -173,10 +176,13 @@ class SitemapParser
     public function parse($url, $urlContent = null)
     {
         $this->clean();
-        $this->currentURL = $url;
+        $this->currentURL = $this->urlEncode($url);
+        if (!$this->urlValidate($this->currentURL)) {
+            throw new Exceptions\SitemapParserException('Invalid URL');
+        }
         $this->history[] = $this->currentURL;
         $response = is_string($urlContent) ? $urlContent : $this->getContent();
-        if ($this->urlValidate($this->currentURL) && parse_url($this->currentURL, PHP_URL_PATH) === self::ROBOTSTXT_PATH) {
+        if (parse_url($this->currentURL, PHP_URL_PATH) === self::ROBOTSTXT_PATH) {
             $this->parseRobotstxt($response);
             return;
         }
