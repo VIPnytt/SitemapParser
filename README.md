@@ -54,7 +54,7 @@ use vipnytt\SitemapParser\Exceptions\SitemapParserException;
 
 try {
     $parser = new SitemapParser();
-    $parser->parse('https://www.google.com/sitemap.xml');
+    $parser->parse('http://php.net/sitemap.xml');
     foreach ($parser->getURLs() as $url => $tags) {
         echo $url . '<br>';
     }
