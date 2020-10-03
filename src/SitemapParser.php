@@ -3,7 +3,6 @@
 namespace vipnytt;
 
 use GuzzleHttp;
-use Psr\Http\Message\StreamInterface;
 use SimpleXMLElement;
 use vipnytt\SitemapParser\Exceptions;
 use vipnytt\SitemapParser\UrlParser;
@@ -214,7 +213,7 @@ class SitemapParser
     /**
      * Request the body content of an URL
      *
-     * @return StreamInterface Returns the body as a stream.
+     * @return string Raw body content
      * @throws Exceptions\TransferException
      * @throws Exceptions\SitemapParserException
      */
@@ -230,7 +229,7 @@ class SitemapParser
             }
             $client = new GuzzleHttp\Client();
             $res = $client->request('GET', $this->currentURL, $this->config['guzzle']);
-            return $res->getBody();
+            return $res->getBody()->getContents();
         } catch (GuzzleHttp\Exception\TransferException $e) {
             throw new Exceptions\TransferException('Unable to fetch URL contents', 0, $e);
         } catch (GuzzleHttp\Exception\GuzzleException $e) {
