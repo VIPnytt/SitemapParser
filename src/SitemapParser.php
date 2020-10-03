@@ -3,6 +3,7 @@
 namespace vipnytt;
 
 use GuzzleHttp;
+use Psr\Http\Message\StreamInterface;
 use SimpleXMLElement;
 use vipnytt\SitemapParser\Exceptions;
 use vipnytt\SitemapParser\UrlParser;
@@ -23,7 +24,7 @@ class SitemapParser
     /**
      * Default User-Agent
      */
-    const DEFAULT_USER_AGENT = 'SitemapParser-VIPnytt/1.0 (+https://github.com/VIPnytt/SitemapParser/blob/master/README.md)';
+    const DEFAULT_USER_AGENT = 'SitemapParser-VIPnytt/1.1 (+https://github.com/VIPnytt/SitemapParser/blob/master/README.md)';
 
     /**
      * Default encoding
@@ -213,7 +214,7 @@ class SitemapParser
     /**
      * Request the body content of an URL
      *
-     * @return string Raw body content
+     * @return StreamInterface Returns the body as a stream.
      * @throws Exceptions\TransferException
      * @throws Exceptions\SitemapParserException
      */
