@@ -16,18 +16,18 @@ class RecursiveTest extends TestCase
         $parser = new SitemapParser('SitemapParser');
         $this->assertInstanceOf('vipnytt\SitemapParser', $parser);
         $parser->parseRecursive($url);
-        $this->assertTrue(is_array($parser->getSitemaps()));
-        $this->assertTrue(is_array($parser->getURLs()));
+        $this->assertInternalType('array', $parser->getSitemaps());
+        $this->assertInternalType('array', $parser->getURLs());
         $this->assertTrue(count($parser->getSitemaps()) > 1 || count($parser->getURLs()) > 100);
         foreach ($parser->getSitemaps() as $url => $tags) {
-            $this->assertTrue(is_string($url));
-            $this->assertTrue(is_array($tags));
+            $this->assertInternalType('string', $url);
+            $this->assertInternalType('array', $tags);
             $this->assertTrue($url === $tags['loc']);
             $this->assertNotFalse(filter_var($url, FILTER_VALIDATE_URL));
         }
         foreach ($parser->getURLs() as $url => $tags) {
-            $this->assertTrue(is_string($url));
-            $this->assertTrue(is_array($tags));
+            $this->assertInternalType('string', $url);
+            $this->assertInternalType('array', $tags);
             $this->assertTrue($url === $tags['loc']);
             $this->assertNotFalse(filter_var($url, FILTER_VALIDATE_URL));
         }
