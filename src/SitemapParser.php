@@ -131,7 +131,6 @@ class SitemapParser
                 $this->parse($todo[0]);
             } catch (Exceptions\TransferException $e) {
                 // Keep crawling
-                continue;
             }
             $this->sitemaps = array_merge_recursive($sitemaps, $this->sitemaps);
             $this->urls = array_merge_recursive($urls, $this->urls);
