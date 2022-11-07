@@ -124,6 +124,7 @@ class SitemapParser
     public function parseRecursive($url)
     {
         $this->addToQueue([$url]);
+        $this->clean();
         while (count($todo = $this->getQueue()) > 0) {
             $sitemaps = $this->sitemaps;
             $urls = $this->urls;
