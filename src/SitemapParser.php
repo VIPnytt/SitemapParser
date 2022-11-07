@@ -371,6 +371,27 @@ class SitemapParser
     }
 
     /**
+     * Convert object to array recursively
+     *
+     * @param $object
+     * @return array
+     */
+    protected function objectToArray($object)
+    {
+        if (is_object($object) || is_array($object)) {
+            $ret = (array)$object;
+
+            foreach($ret as &$item) {
+                $item = $this->objectToArray($item);
+            }
+
+            return $ret;
+        } else {
+            return $object;
+        }
+    }
+
+    /**
      * Parse Json object
      *
      * @param string $type Sitemap or URL
@@ -382,9 +403,36 @@ class SitemapParser
         if (!isset($json->$type)) {
             return false;
         }
-        foreach ($json->$type as $url) {
-            $this->addArray($type, (array)$url);
+
+	$nameSpaces = $json->getDocNamespaces();
+
+        if (!empty($nameSpaces)) {
+            $tags = ["namespaces" => []];
+
+            foreach ($json->$type as $node) {
+                foreach ($nameSpaces as $nameSpace => $value) {
+                    if ($nameSpace != "") {
+                        $tags["namespaces"] = array_merge(
+                            $tags["namespaces"],
+                            [
+                                $nameSpace => $this->objectToArray(
+                                    $node->children($nameSpace, true)
+                                )
+                            ]
+                        );
+                    } else {
+                        $tags = array_merge($tags, (array)$node);
+                    }
+                }
+
+                $this->addArray($type, $tags);
+            }
+        } else {
+            foreach ($json->$type as $node) {
+                $this->addArray($type, (array)$node);
+            }
         }
+
         return true;
     }
 
