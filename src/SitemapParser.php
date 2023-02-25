@@ -404,12 +404,11 @@ class SitemapParser
             return false;
         }
 
-	$nameSpaces = $json->getDocNamespaces();
+        $nameSpaces = $json->getDocNamespaces();
 
         if (!empty($nameSpaces)) {
-            $tags = ["namespaces" => []];
-
             foreach ($json->$type as $node) {
+                $tags = ["namespaces" => []];
                 foreach ($nameSpaces as $nameSpace => $value) {
                     if ($nameSpace != "") {
                         $tags["namespaces"] = array_merge(
