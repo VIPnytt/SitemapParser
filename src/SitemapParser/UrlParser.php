@@ -54,8 +54,12 @@ trait UrlParser
         return (
             filter_var($url, FILTER_VALIDATE_URL) &&
             ($parsed = parse_url($url)) !== false &&
-            $this->urlValidateHost($parsed['host']) &&
-            $this->urlValidateScheme($parsed['scheme'])
+            $this->urlValidateScheme($parsed['scheme']) &&
+            (
+                (in_array($parsed['scheme'], ['http', 'https'], true) && $this->urlValidateHost($parsed['host']))
+                ||
+                (in_array($parsed['scheme'], ['file'], true) && $this->urlValidatePath($parsed['path']))
+            )
         );
     }
 
@@ -87,7 +91,23 @@ trait UrlParser
         return in_array($scheme, [
                 'http',
                 'https',
+                'file'
             ]
         );
+    }
+
+    /**
+     * Check if local file exists at given path.
+     *
+     * @param mixed $path
+     * @return bool
+     */
+    public function urlValidatePath(mixed $path) {
+        $result = file_exists($path);
+        if ($result === false && PHP_OS === 'WINNT') {
+            // try to reverse url encoding for windows paths:
+            return file_exists(urldecode($path));
+        }
+        return $result;
     }
 }
