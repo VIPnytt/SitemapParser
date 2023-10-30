@@ -454,4 +454,41 @@ class SitemapParser
     {
         return $this->urls;
     }
+
+    /**
+     * Get config
+     *
+     * @return array
+     */
+    public function getConfig(): array {
+        return $this->config;
+    }
+
+    /**
+     * Set config
+     *
+     * @param array $config
+     * @return void
+     */
+    public function setConfig(array $config): void {
+        $this->config = $config;
+    }
+
+    /**
+     * Get user agent
+     *
+     * @return string
+     */
+    public function getUserAgent(): string {
+        return $this->userAgent;
+    }
+
+    /**
+     * Change user agent after object creation
+     *
+     * @param string $userAgent
+     */
+    public function setUserAgent(string $userAgent): void {
+        $this->userAgent = $userAgent;
+    }
 }
