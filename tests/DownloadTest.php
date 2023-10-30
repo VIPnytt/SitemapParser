@@ -18,17 +18,17 @@ class DownloadTest extends TestCase
         $this->assertIsArray($parser->getSitemaps());
         $this->assertIsArray($parser->getURLs());
         $this->assertTrue(count($parser->getSitemaps()) > 0 || count($parser->getURLs()) > 0);
-        foreach ($parser->getSitemaps() as $url => $tags) {
-            $this->assertIsString($url);
+        foreach ($parser->getSitemaps() as $parsedUrl => $tags) {
+            $this->assertIsString($parsedUrl);
             $this->assertIsArray($tags);
-            $this->assertTrue($url === $tags['loc']);
-            $this->assertNotFalse(filter_var($url, FILTER_VALIDATE_URL));
+            $this->assertTrue($parsedUrl === $tags['loc']);
+            $this->assertNotFalse(filter_var($parsedUrl, FILTER_VALIDATE_URL));
         }
-        foreach ($parser->getURLs() as $url => $tags) {
-            $this->assertIsString($url);
+        foreach ($parser->getURLs() as $parsedUrl => $tags) {
+            $this->assertIsString($parsedUrl);
             $this->assertIsArray($tags);
-            $this->assertTrue($url === $tags['loc']);
-            $this->assertNotFalse(filter_var($url, FILTER_VALIDATE_URL));
+            $this->assertTrue($parsedUrl === $tags['loc']);
+            $this->assertNotFalse(filter_var($parsedUrl, FILTER_VALIDATE_URL));
         }
     }
 
