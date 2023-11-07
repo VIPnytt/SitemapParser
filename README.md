@@ -19,6 +19,7 @@ The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard an
 - String parsing
 - Custom User-Agent string
 - Proxy support
+- URL blacklist
 
 ## Formats supported
 - XML `.xml`
@@ -91,7 +92,9 @@ try {
 ```
 
 ### Recursive
-Parses any sitemap detected while parsing, to get an complete list of URLs
+Parses any sitemap detected while parsing, to get an complete list of URLs.
+
+Use `url_black_list` to skip sitemaps that are part of parent sitemap. Exact match only.
 ```php
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
@@ -152,6 +155,8 @@ $config = [
         // GuzzleHttp request options
         // http://docs.guzzlephp.org/en/latest/request-options.html
     ],
+    // use this to ignore URL when parsing sitemaps that contain multiple other sitemaps. Exact match only.
+    'url_black_list' => []
 ];
 $parser = new SitemapParser('MyCustomUserAgent', $config);
 ```

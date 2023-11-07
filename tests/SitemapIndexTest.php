@@ -53,14 +53,17 @@ XMLSITEMAP
                     'http://www.example.com/sitemap2.xml' => [
                         'loc' => 'http://www.example.com/sitemap2.xml',
                         'lastmod' => '2004-10-01T18:23:17+00:00',
+                        'namespaces'=> [],
                     ],
                     'http://www.example.com/sitemap3.xml' => [
                         'loc' => 'http://www.example.com/sitemap3.xml',
                         'lastmod' => '2005-09-01T17:22:16+00:00',
+                        'namespaces'=> [],
                     ],
                     'http://www.example.com/sitemap4.xml.gz' => [
                         'loc' => 'http://www.example.com/sitemap4.xml.gz',
                         'lastmod' => '2006-08-01T16:21:15+00:00',
+                        'namespaces'=> [],
                     ],
                 ]
             ]

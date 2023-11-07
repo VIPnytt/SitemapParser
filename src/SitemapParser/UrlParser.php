@@ -59,7 +59,8 @@ trait UrlParser
                 (in_array($parsed['scheme'], ['http', 'https'], true) && $this->urlValidateHost($parsed['host']))
                 ||
                 (in_array($parsed['scheme'], ['file'], true) && $this->urlValidatePath($parsed['path']))
-            )
+            ) &&
+            $this->urlValidateAgainstBlackList($url)
         );
     }
 
@@ -109,5 +110,14 @@ trait UrlParser
             return file_exists(urldecode($path));
         }
         return $result;
+    }
+
+    protected function urlValidateAgainstBlackList($url)
+    {
+        if (empty($this->config['url_black_list'])) {
+            return true;
+        }
+
+        return !in_array($url, $this->config['url_black_list'], true);
     }
 }
