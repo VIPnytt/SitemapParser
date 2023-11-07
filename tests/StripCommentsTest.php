@@ -20,23 +20,28 @@ class StripCommentsTest extends TestCase
         $this->assertEquals([
             'https://www.bellinghambaymarathon.org/post-sitemap.xml' => [
                 'loc' => 'https://www.bellinghambaymarathon.org/post-sitemap.xml',
-                'lastmod' => '2019-07-19T10:18:07-07:00'
+                'lastmod' => '2019-07-19T10:18:07-07:00',
+                'namespaces'=> [],
             ],
             'https://www.bellinghambaymarathon.org/page-sitemap.xml' => [
                 'loc' => 'https://www.bellinghambaymarathon.org/page-sitemap.xml',
-                'lastmod' => '2019-07-29T06:51:35-07:00'
+                'lastmod' => '2019-07-29T06:51:35-07:00',
+                'namespaces'=> [],
             ],
             'https://www.bellinghambaymarathon.org/category-sitemap.xml' => [
                 'loc' => 'https://www.bellinghambaymarathon.org/category-sitemap.xml',
-                'lastmod' => '2019-07-19T10:18:07-07:00'
+                'lastmod' => '2019-07-19T10:18:07-07:00',
+                'namespaces'=> [],
             ],
             'https://www.bellinghambaymarathon.org/post_tag-sitemap.xml' => [
                 'loc' => 'https://www.bellinghambaymarathon.org/post_tag-sitemap.xml',
-                'lastmod' => '2019-05-16T10:06:14-07:00'
+                'lastmod' => '2019-05-16T10:06:14-07:00',
+                'namespaces'=> [],
             ],
             'https://www.bellinghambaymarathon.org/author-sitemap.xml' => [
                 'loc' => 'https://www.bellinghambaymarathon.org/author-sitemap.xml',
-                'lastmod' => '2018-08-22T17:12:52-07:00'
+                'lastmod' => '2018-08-22T17:12:52-07:00',
+                'namespaces'=> [],
             ],
         ], $parser->getSitemaps());
         $this->assertEquals([], $parser->getURLs());
