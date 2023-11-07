@@ -55,7 +55,8 @@ trait UrlParser
             filter_var($url, FILTER_VALIDATE_URL) &&
             ($parsed = parse_url($url)) !== false &&
             $this->urlValidateHost($parsed['host']) &&
-            $this->urlValidateScheme($parsed['scheme'])
+            $this->urlValidateScheme($parsed['scheme']) &&
+            $this->urlValidateAgainstBlackList($url)
         );
     }
 
@@ -89,5 +90,14 @@ trait UrlParser
                 'https',
             ]
         );
+    }
+
+    protected function urlValidateAgainstBlackList($url)
+    {
+        if (empty($this->config['url_black_list'])) {
+            return true;
+        }
+
+        return !in_array($url, $this->config['url_black_list'], true);
     }
 }
