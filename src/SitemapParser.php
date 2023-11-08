@@ -224,6 +224,16 @@ class SitemapParser
             throw new Exceptions\SitemapParserException('Invalid URL');
         }
         try {
+            if (strpos($this->currentURL, 'file://') === 0) {
+                $path = parse_url($this->currentURL, PHP_URL_PATH);
+                if (!$this->urlValidatePath($path)) {
+                    throw new Exceptions\SitemapParserException('Invalid file path');
+                }
+                if (!file_exists($path) && PHP_OS === 'WINNT') {
+                    return file_get_contents(urldecode($path));
+                }
+                return file_get_contents($path);
+            }
             if (!isset($this->config['guzzle']['headers']['User-Agent'])) {
                 $this->config['guzzle']['headers']['User-Agent'] = $this->userAgent;
             }
