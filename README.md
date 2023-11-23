@@ -22,7 +22,7 @@ The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard an
 - URL blacklist
 - request throttling (using https://github.com/hamburgscleanest/guzzle-advanced-throttle)
 - retry (using https://github.com/caseyamcl/guzzle_retry_middleware)
-- advanced logging (using https://github.com/gmponos/guzzle-log-middleware)
+- advanced logging (using https://github.com/gmponos/guzzle_logger)
 
 ## Formats supported
 - XML `.xml`
@@ -231,7 +231,7 @@ More details about this middle ware is available [here](https://github.com/casey
 
 1. Install middleware:
 ```bash
-composer require gmponos/guzzle-log-middleware
+composer require gmponos/guzzle_logger
 ```
 
 2. Create PSR-3 style logger
@@ -260,7 +260,7 @@ $client = new \GuzzleHttp\Client(['handler' => $stack]);
 $parser = new SitemapParser();
 $parser->setClient($client);
 ```
-More details about this middleware config (like log levels, when to log and what to log) is available [here](https://github.com/gmponos/guzzle-log-middleware)
+More details about this middleware config (like log levels, when to log and what to log) is available [here](https://github.com/gmponos/guzzle_logger)
 
 
 
