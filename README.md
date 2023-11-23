@@ -22,6 +22,7 @@ The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard an
 - URL blacklist
 - request throttling (using https://github.com/hamburgscleanest/guzzle-advanced-throttle)
 - retry (using https://github.com/caseyamcl/guzzle_retry_middleware)
+- advanced logging (using https://github.com/gmponos/guzzle-log-middleware)
 
 ## Formats supported
 - XML `.xml`
@@ -225,6 +226,42 @@ $parser = new SitemapParser();
 $parser->setClient($client);
 ```
 More details about this middle ware is available [here](https://github.com/caseyamcl/guzzle_retry_middleware)
+
+### Advanced logging
+
+1. Install middleware:
+```bash
+composer require gmponos/guzzle-log-middleware
+```
+
+2. Create PSR-3 style logger
+```php
+$logger = new Logger();
+```
+
+3. Create handler stack:
+
+```php
+$stack = new HandlerStack();
+$stack->setHandler(new CurlHandler());
+```
+
+5. Push logger middleware to stack
+```php
+$stack->push(new LogMiddleware($logger));
+```
+
+6. Create client manually:
+```php
+$client = new \GuzzleHttp\Client(['handler' => $stack]);
+```
+7. Pass client as an argument or use `setClient` method:
+```php
+$parser = new SitemapParser();
+$parser->setClient($client);
+```
+More details about this middleware config (like log levels, when to log and what to log) is available [here](https://github.com/gmponos/guzzle-log-middleware)
+
 
 
 ### Additional examples

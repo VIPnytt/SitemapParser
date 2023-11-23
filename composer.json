@@ -46,6 +46,7 @@
   },
   "suggest": {
     "caseyamcl/guzzle_retry_middleware": "Allow automatic retry when request for sitemap fails",
-    "hamburgscleanest/guzzle-advanced-throttle": "Throttle requests"
+    "hamburgscleanest/guzzle-advanced-throttle": "Throttle requests",
+    "gmponos/guzzle-log-middleware": "Advanced logging"
   }
 }
