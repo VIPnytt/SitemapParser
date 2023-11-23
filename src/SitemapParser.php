@@ -118,7 +118,9 @@ class SitemapParser
         $this->userAgent = $userAgent;
         $this->config = $config;
 
-        $this->setClient($client);
+        if (!is_null($client)) {
+            $this->setClient($client);
+        }
     }
 
     /**
