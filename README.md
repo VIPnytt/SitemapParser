@@ -20,6 +20,8 @@ The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard an
 - Custom User-Agent string
 - Proxy support
 - URL blacklist
+- request throttling (using https://github.com/hamburgscleanest/guzzle-advanced-throttle)
+- retry (using https://github.com/caseyamcl/guzzle_retry_middleware)
 
 ## Formats supported
 - XML `.xml`
@@ -33,7 +35,9 @@ The [Sitemaps.org](http://www.sitemaps.org/) protocol is the leading standard an
   - [mbstring](http://php.net/manual/en/book.mbstring.php)
   - [libxml](http://php.net/manual/en/book.libxml.php) _(enabled by default)_
   - [SimpleXML](http://php.net/manual/en/book.simplexml.php) _(enabled by default)_
-
+- Optional:
+  - https://github.com/caseyamcl/guzzle_retry_middleware
+  - https://github.com/hamburgscleanest/guzzle-advanced-throttle
 ## Installation
 The library is available for install via [Composer](https://getcomposer.org). Just add this to your `composer.json` file:
 ```json
@@ -142,6 +146,86 @@ try {
     echo $e->getMessage();
 }
 ```
+
+### Throttling
+
+1. Install middleware:
+```bash
+composer require hamburgscleanest/guzzle-advanced-throttle
+```
+2. Define host rules:
+
+```php
+$rules = new RequestLimitRuleset([
+    'https://www.google.com' => [
+        [
+            'max_requests'     => 20,
+            'request_interval' => 1
+        ],
+        [
+            'max_requests'     => 100,
+            'request_interval' => 120
+        ]
+    ]
+]);
+```
+3. Create handler stack:
+
+```php
+$stack = new HandlerStack();
+$stack->setHandler(new CurlHandler());
+```
+4. Create middleware:
+```php
+$throttle = new ThrottleMiddleware($rules);
+
+ // Invoke the middleware
+$stack->push($throttle());
+ 
+// OR: alternatively call the handle method directly
+$stack->push($throttle->handle());
+```
+5. Create client manually:
+```php
+$client = new \GuzzleHttp\Client(['handler' => $stack]);
+```
+6. Pass client as an argument or use `setClient` method:
+```php
+$parser = new SitemapParser();
+$parser->setClient($client);
+```
+More details about this middle ware is available [here](https://github.com/hamburgscleanest/guzzle-advanced-throttle) 
+
+### Automatic retry
+
+1. Install middleware:
+```bash
+composer require caseyamcl/guzzle_retry_middleware
+```
+
+2. Create stack:
+```php
+$stack = new HandlerStack();
+$stack->setHandler(new CurlHandler());
+```
+
+3. Add middleware to the stack:
+```php
+$stack->push(GuzzleRetryMiddleware::factory());
+```
+
+4. Create client manually:
+```php
+$client = new \GuzzleHttp\Client(['handler' => $stack]);
+```
+
+5. Pass client as an argument or use setClient method:
+```php
+$parser = new SitemapParser();
+$parser->setClient($client);
+```
+More details about this middle ware is available [here](https://github.com/caseyamcl/guzzle_retry_middleware)
+
 
 ### Additional examples
 Even more examples available in the [examples](https://github.com/VIPnytt/SitemapParser/tree/master/examples) directory.
