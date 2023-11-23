@@ -109,7 +109,7 @@ class SitemapParser
      * @param array $config Configuration options
      * @throws Exceptions\SitemapParserException
      */
-    public function __construct($userAgent = self::DEFAULT_USER_AGENT, array $config = [], GuzzleHttp\Client $client)
+    public function __construct($userAgent = self::DEFAULT_USER_AGENT, array $config = [], GuzzleHttp\Client $client = null)
     {
         mb_language("uni");
         if (!mb_internal_encoding(self::ENCODING)) {
