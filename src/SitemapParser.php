@@ -480,7 +480,7 @@ class SitemapParser
      * @param array $config
      * @return void
      */
-    public function setConfig(array $config): void {
+    public function setConfig(array $config) {
         $this->config = $config;
     }
 
@@ -489,7 +489,7 @@ class SitemapParser
      *
      * @return string
      */
-    public function getUserAgent(): string {
+    public function getUserAgent() {
         return $this->userAgent;
     }
 
@@ -498,7 +498,7 @@ class SitemapParser
      *
      * @param string $userAgent
      */
-    public function setUserAgent(string $userAgent): void {
+    public function setUserAgent(string $userAgent) {
         $this->userAgent = $userAgent;
     }
 }
