@@ -98,13 +98,18 @@ class SitemapParser
     protected $currentURL;
 
     /**
+     * @var \GuzzleHttp\Client
+     */
+    protected $client;
+
+    /**
      * Constructor
      *
      * @param string $userAgent User-Agent to send with every HTTP(S) request
      * @param array $config Configuration options
      * @throws Exceptions\SitemapParserException
      */
-    public function __construct($userAgent = self::DEFAULT_USER_AGENT, array $config = [])
+    public function __construct($userAgent = self::DEFAULT_USER_AGENT, array $config = [], GuzzleHttp\Client $client = null)
     {
         mb_language("uni");
         if (!mb_internal_encoding(self::ENCODING)) {
@@ -112,6 +117,10 @@ class SitemapParser
         }
         $this->userAgent = $userAgent;
         $this->config = $config;
+
+        if (!is_null($client)) {
+            $this->setClient($client);
+        }
     }
 
     /**
@@ -237,7 +246,7 @@ class SitemapParser
             if (!isset($this->config['guzzle']['headers']['User-Agent'])) {
                 $this->config['guzzle']['headers']['User-Agent'] = $this->userAgent;
             }
-            $client = new GuzzleHttp\Client();
+            $client = $this->getClient();
             $res = $client->request('GET', $this->currentURL, $this->config['guzzle']);
             return $res->getBody()->getContents();
         } catch (GuzzleHttp\Exception\TransferException $e) {
@@ -505,5 +514,26 @@ class SitemapParser
      */
     public function setUserAgent(string $userAgent) {
         $this->userAgent = $userAgent;
+    }
+
+    /**
+     * @return \GuzzleHttp\Client
+     */
+    protected function getClient()
+    {
+        if (empty($this->client)) {
+            $this->client = new \GuzzleHttp\Client();
+        }
+        return $this->client;
+    }
+
+    /**
+     * @param mixed $client
+     * @return $this
+     */
+    public function setClient(\GuzzleHttp\Client $client)
+    {
+        $this->client = $client;
+        return $this;
     }
 }
