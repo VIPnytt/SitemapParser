@@ -389,16 +389,26 @@ class SitemapParser
     protected function objectToArray($object)
     {
         if (is_object($object) || is_array($object)) {
-            $ret = (array)$object;
+            if (is_object($object) && $object instanceof SimpleXMLElement and count($object->getNamespaces()) != 0 ) {
+                if (count($object->attributes()) != 0) {
+                    $ret = [];
+                    foreach($object->attributes() as $attribute) {
+                        $ret[$attribute->getName()] = $attribute->__toString();
+                    }
+                } else {
+                    $ret = (array)$object;
+                }
+            } else {
+                $ret = (array)$object;
+            }
 
             foreach($ret as &$item) {
                 $item = $this->objectToArray($item);
             }
 
             return $ret;
-        } else {
-            return $object;
         }
+        return $object;
     }
 
     /**
@@ -415,20 +425,15 @@ class SitemapParser
         }
 
         $nameSpaces = $json->getDocNamespaces();
-
+        $notEmptyNamespaceNames = array_filter(array_keys($nameSpaces));
         if (!empty($nameSpaces)) {
             foreach ($json->$type as $node) {
-                $tags = ["namespaces" => []];
+                $tags = ["namespaces" => array_combine($notEmptyNamespaceNames, array_fill(0,count($notEmptyNamespaceNames),[]))];
                 foreach ($nameSpaces as $nameSpace => $value) {
                     if ($nameSpace != "") {
-                        $tags["namespaces"] = array_merge(
-                            $tags["namespaces"],
-                            [
-                                $nameSpace => $this->objectToArray(
-                                    $node->children($nameSpace, true)
-                                )
-                            ]
-                        );
+                        foreach($node->children($nameSpace, true) as $child) {
+                            $tags["namespaces"][$nameSpace][] = [$child->getName() => $this->objectToArray($child)];
+                        }
                     } else {
                         $tags = array_merge($tags, (array)$node);
                     }
