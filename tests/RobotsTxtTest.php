@@ -32,19 +32,31 @@ class RobotsTxtTest extends TestCase
             [
                 'http://www.example.com/robots.txt',
                 <<<ROBOTSTXT
-User-agent: *
-Disallow: /
-#Sitemap:http://www.example.com/sitemap.xml.gz
-  Sitemap:http://www.example.com/sitemap.xml#comment
-ROBOTSTXT
+    User-agent: *
+    Disallow: /
+    #Sitemap:http://www.example.com/sitemap.xml.gz
+    Sitemap:http://www.example.com/sitemap.xml#comment
+    ROBOTSTXT
                 ,
-                $result = [
+                [
                     'http://www.example.com/sitemap.xml' => [
                         'loc' => 'http://www.example.com/sitemap.xml',
                         'lastmod' => null,
                     ],
                 ],
-            ]
+            ],
+            [
+                'http://www.example.com/robots.txt',
+                "# Alle Robots ausschlie" . chr(0xDF) . "en\n"
+                . "User-agent: *\n"
+                . "Sitemap: http://www.example.com/sitemap.xml\n",
+                [
+                    'http://www.example.com/sitemap.xml' => [
+                        'loc' => 'http://www.example.com/sitemap.xml',
+                        'lastmod' => null,
+                    ],
+                ],
+            ],
         ];
     }
 }
