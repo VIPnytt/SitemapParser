@@ -265,13 +265,13 @@ class SitemapParser
     protected function parseRobotstxt($robotstxt)
     {
         // Split lines into array
-        $lines = array_filter(array_map('trim', mb_split('\r\n|\n|\r', $robotstxt)));
+        $lines = array_filter(array_map('trim', preg_split('/\R/', $robotstxt) ?: []));
         // Parse each line individually
         foreach ($lines as $line) {
             // Remove comments
-            $line = mb_split('#', $line, 2)[0];
+            $line = explode('#', $line, 2)[0];
             // Split by directive and rule
-            $pair = array_map('trim', mb_split(':', $line, 2));
+            $pair = array_map('trim', explode(':', $line, 2));
             // Check if the line contains a sitemap
             if (
                 mb_strtolower($pair[0]) !== self::XML_TAG_SITEMAP ||
